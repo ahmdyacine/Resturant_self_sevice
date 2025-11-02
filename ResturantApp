@@ -1,0 +1,179 @@
+#include <stdio.h>
+
+int main() {
+    int foodChoice, typeChoice, sizeChoice, extraChoice, quantity;
+    float total = 0, basePrice = 0, sizePrice = 0, extraPrice = 0;
+    char addExtra, more;
+    int exitApp = 0;
+
+    printf("=============================================\n");
+    printf("      WELCOME TO SELF-SERVICE RESTAURANT\n");
+    printf("=============================================\n");
+
+main_menu:
+    while (!exitApp) {
+        printf("\n========== MAIN MENU ==========\n");
+        printf("1. Burger\n");
+        printf("2. Pizza\n");
+        printf("3. Pasta\n");
+        printf("4. Sandwich\n");
+        printf("5. Soft Drink\n");
+        printf("0. Exit\n");
+        printf("Choose your food: ");
+        scanf("%d", &foodChoice);
+
+        if (foodChoice == 0) break;
+
+    type_menu:
+        basePrice = 0;
+        printf("\n========== TYPE MENU ==========\n");
+        switch (foodChoice) {
+            case 1:
+                printf("1. Beef Burger    - $5.00\n");
+                printf("2. Chicken Burger - $4.50\n");
+                printf("3. Veggie Burger  - $4.00\n");
+                break;
+            case 2:
+                printf("1. Margherita     - $7.00\n");
+                printf("2. Pepperoni      - $8.50\n");
+                printf("3. BBQ Chicken    - $9.00\n");
+                break;
+            case 3:
+                printf("1. Alfredo     - $6.00\n");
+                printf("2. Bolognese   - $6.50\n");
+                printf("3. Carbonara   - $7.00\n");
+                break;
+            case 4:
+                printf("1. Club Sandwich   - $4.00\n");
+                printf("2. Tuna Sandwich   - $4.50\n");
+                printf("3. Veggie Sandwich - $3.50\n");
+                break;
+            case 5:
+                printf("1. Cola   - $2.00\n");
+                printf("2. Fanta  - $2.00\n");
+                printf("3. Sprite - $2.00\n");
+                break;
+            default:
+                printf("Invalid food choice.\n");
+                goto main_menu;
+        }
+        printf("9. Return to Main Menu\n");
+        printf("0. Return to Previous (Main Menu)\n");
+        printf("Choose your type: ");
+        scanf("%d", &typeChoice);
+
+        if (typeChoice == 0 || typeChoice == 9) goto main_menu;
+
+        switch (foodChoice) {
+            case 1:
+                if (typeChoice == 1) basePrice = 5.00;
+                else if (typeChoice == 2) basePrice = 4.50;
+                else if (typeChoice == 3) basePrice = 4.00;
+                else { printf("Invalid.\n"); goto type_menu; }
+                break;
+            case 2:
+                if (typeChoice == 1) basePrice = 7.00;
+                else if (typeChoice == 2) basePrice = 8.50;
+                else if (typeChoice == 3) basePrice = 9.00;
+                else { printf("Invalid.\n"); goto type_menu; }
+                break;
+            case 3:
+                if (typeChoice == 1) basePrice = 6.00;
+                else if (typeChoice == 2) basePrice = 6.50;
+                else if (typeChoice == 3) basePrice = 7.00;
+                else { printf("Invalid.\n"); goto type_menu; }
+                break;
+            case 4:
+                if (typeChoice == 1) basePrice = 4.00;
+                else if (typeChoice == 2) basePrice = 4.50;
+                else if (typeChoice == 3) basePrice = 3.50;
+                else { printf("Invalid.\n"); goto type_menu; }
+                break;
+            case 5:
+                if (typeChoice >= 1 && typeChoice <= 3) basePrice = 2.00;
+                else { printf("Invalid.\n"); goto type_menu; }
+                break;
+        }
+
+    size_menu:
+        printf("\n========== SIZE MENU ==========\n");
+        printf("1. Small  (+$0.00)\n");
+        printf("2. Medium (+$1.00)\n");
+        printf("3. Large  (+$2.00)\n");
+        printf("8. Return to Type Menu\n");
+        printf("9. Return to Main Menu\n");
+        printf("Choose size: ");
+        scanf("%d", &sizeChoice);
+
+        if (sizeChoice == 9) goto main_menu;
+        if (sizeChoice == 8) goto type_menu;
+
+        switch (sizeChoice) {
+            case 1: sizePrice = 0.00; break;
+            case 2: sizePrice = 1.00; break;
+            case 3: sizePrice = 2.00; break;
+            default: printf("Invalid size.\n"); goto size_menu;
+        }
+
+    extras_menu:
+        printf("\nDo you want extras? (ketchup, cheese, sauce)\n");
+        printf("1. Yes\n");
+        printf("2. No\n");
+        printf("8. Return to Size Menu\n");
+        printf("9. Return to Main Menu\n");
+        printf("Choose: ");
+        scanf("%d", &extraChoice);
+
+        if (extraChoice == 9) goto main_menu;
+        if (extraChoice == 8) goto size_menu;
+
+        extraPrice = 0.0;
+        if (extraChoice == 1) {
+        extras_submenu:
+            printf("\n--- Extras Menu ---\n");
+            printf("1. Ketchup  (+$0.50)\n");
+            printf("2. Cheese   (+$1.00)\n");
+            printf("3. Sauce    (+$0.75)\n");
+            printf("8. Return to Extras Choice\n");
+            printf("9. Return to Main Menu\n");
+            printf("Choose extra: ");
+            scanf("%d", &extraChoice);
+            if (extraChoice == 8) goto extras_menu;
+            if (extraChoice == 9) goto main_menu;
+            switch (extraChoice) {
+                case 1: extraPrice = 0.50; break;
+                case 2: extraPrice = 1.00; break;
+                case 3: extraPrice = 0.75; break;
+                default: printf("Invalid extra.\n"); goto extras_submenu;
+            }
+        }
+
+    quantity_menu:
+        printf("\nEnter quantity (0 = Main Menu, 8 = Return to Extras): ");
+        scanf("%d", &quantity);
+        if (quantity == 0) goto main_menu;
+        if (quantity == 8) goto extras_menu;
+
+        float itemTotal = (basePrice + sizePrice + extraPrice) * quantity;
+        total += itemTotal;
+
+        printf("\n------------------------------------------\n");
+        printf("Item total: $%.2f\n", itemTotal);
+        printf("Current Total: $%.2f\n", total);
+        printf("------------------------------------------\n");
+
+        printf("\nDo you want to order more? (y/n): ");
+        scanf(" %c", &more);
+        if (more == 'y' || more == 'Y') goto main_menu;
+        else break;
+    }
+
+    printf("\n=============================================\n");
+    printf("                FINAL BILL\n");
+    printf("=============================================\n");
+    printf("Total Amount: $%.2f\n", total);
+    printf("Thank you for dining with us!\n");
+    printf("=============================================\n");
+
+    return 0;
+}
